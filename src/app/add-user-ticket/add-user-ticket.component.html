@@ -1,0 +1,41 @@
+<h1 mat-dialog-title>Please enter the new information?</h1>
+<div mat-dialog-content class="d-flex">
+    <ng-container *ngFor="let column of data">
+        <ng-container *ngIf="column.fieldType == 'date';else boolField">
+            <mat-form-field appearance="fill">
+                <mat-label>{{column.fieldName}}: Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" disabled="true" [ngModel]="element[column.fieldName]"
+                    (ngModelChange)="updateDateField(element, column.fieldName,$event);">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker disabled="false"></mat-datepicker>
+            </mat-form-field>
+        </ng-container>
+
+        <ng-template #boolField>
+            <ng-container *ngIf="column.fieldType == 'yes/no';else numberField">
+                <mat-checkbox [(ngModel)]="element[column.fieldName]">{{column.fieldName}}</mat-checkbox>
+            </ng-container>
+        </ng-template>
+
+        <ng-template #numberField>
+            <ng-container *ngIf="column.fieldType == 'number';else textField">
+                <mat-form-field appearance="fill">
+                    <mat-label> {{column.fieldName}} </mat-label>
+                    <input matInput type="number" [(ngModel)]="element[column.fieldName]">
+                </mat-form-field>
+            </ng-container>
+        </ng-template>
+
+        <ng-template #textField>
+            <mat-form-field appearance="fill">
+                <mat-label> {{column.fieldName}} </mat-label>
+                <input matInput type="text" [(ngModel)]="element[column.fieldName]">
+            </mat-form-field>
+        </ng-template>
+
+    </ng-container>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">No Thanks</button>
+    <button mat-button [mat-dialog-close]="element" cdkFocusInitial>Ok</button>
+</div>
